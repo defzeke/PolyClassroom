@@ -5,16 +5,34 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CallIcon from '@mui/icons-material/Call';
 import ChatIcon from '@mui/icons-material/Chat';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import { useEffect , useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 
 export default function Contacts() {
+    // Ref for all animated boxes
+    const animatedRefs = useRef([]);
+
+    useEffect(() => {
+        const boxes = animatedRefs.current;
+        if (!boxes) return;
+        const observer = new window.IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+        boxes.forEach(box => {
+            if (box) observer.observe(box);
+        });
+        return () => observer.disconnect();
+    }, []);
 
     return(
         <>
             <div className="flex flex-col justify-center items-center min-h-screen w-full bg-[#FCF0F0] px-8 py-12">
                 <div id="contacts" className="flex flex-row items-center justify-center gap-8 w-full scroll-mt-3">
-                    <div className="flex flex-col bg-white h-200 w-250 rounded-xl shadow-xl">
+                    <div ref={el => { animatedRefs.current[0] = el; }} className="flex flex-col bg-white h-200 w-250 rounded-xl shadow-xl fade-in-up">
                         <span className="flex justify-center items-center font-bold text-[32px] mt-12 gap-5 align-center text-[#232A3B]"><QuestionAnswerIcon fontSize='large' className='mt-2'/>Start The Conversation</span>
 
                         <form>
@@ -55,7 +73,7 @@ export default function Contacts() {
                     </div>
 
                     <div className="flex flex-col gap-7">
-                        <div className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2">
+                        <div ref={el => { animatedRefs.current[1] = el; }} className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2 fade-in-up">
                             <CallIcon fontSize="large" className="text-[#8E2424] mb-2" />
                             <span className="font-semibold text-lg text-[#232A3B]">Call Us Now</span>
                             <span className="text-md text-[#232A3B]">+1 (555) 123-4567</span>
@@ -63,7 +81,7 @@ export default function Contacts() {
                             <button className="mt-3 bg-[#8E2424] text-white px-4 py-2 rounded hover:bg-[#711C1C] transition font-semibold">Schedule Call</button>
                         </div>
 
-                        <div className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2">
+                        <div ref={el => { animatedRefs.current[2] = el; }} className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2 fade-in-up">
                             <ChatIcon fontSize="large" className="text-[#8E2424] mb-2" />
                             <span className="font-semibold text-lg text-[#232A3B]">Chat With Us</span>
                             <span className="text-md text-[#232A3B]">+1 (555) 123-4567</span>
@@ -71,7 +89,7 @@ export default function Contacts() {
                             <button className="mt-3 bg-[#8E2424] text-white px-4 py-2 rounded hover:bg-[#711C1C] transition font-semibold">Start Chat</button>
                         </div>
                         
-                        <div className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2">
+                        <div ref={el => { animatedRefs.current[3] = el; }} className="h-62 w-62 bg-white rounded-xl shadow-xl flex flex-col items-center justify-center p-6 gap-2 fade-in-up">
                             <DateRangeIcon fontSize="large" className="text-[#8E2424] mb-2" />
                             <span className="font-semibold text-lg text-[#232A3B]">Book a Meeting</span>
                             <span className="text-md text-[#232A3B]">+1 (555) 123-4567</span>
@@ -83,7 +101,7 @@ export default function Contacts() {
                 </div>
 
                 <div className="flex justify-center items-center mt-8 w-full">
-                    <div className="bg-[#fff] rounded-xl shadow-xl p-10 w-full max-w-7xl">
+                    <div ref={el => { animatedRefs.current[4] = el; }} className="bg-[#fff] rounded-xl shadow-xl p-10 w-full max-w-7xl fade-in-up">
                         <div className="flex flex-row justify-center items-start w-full gap-16">
                             <div className="flex flex-col items-center w-1/2 -mt-2">
                                 <div className="flex items-center gap-3 mb-2">

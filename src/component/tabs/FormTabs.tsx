@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import PersonIcon from '@mui/icons-material/Person';
-import { supabase } from '../../../lib/supabaseClient';
+
 
 export default function FormTabs() {
     const formRef = useRef<HTMLDivElement>(null);
@@ -16,12 +16,10 @@ export default function FormTabs() {
     }, []);
 
     const [activeTab, setActiveTab] = useState("signin");
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [signupSuccess, setSignupSuccess] = useState("");
 
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -31,57 +29,44 @@ export default function FormTabs() {
             return;
         }
 
-        const { error } = await supabase.auth.signUp({
-            email,
-            password, 
-            options: { data: { name } }
-        });
-        
-        if (error) {
-            alert(error.message);
-        } else {
-            alert("Registration successful! Please check your email for a verification link or OTP.");
-            setName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
+        try {
+            const response = await fetch("http://localhost:5000/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password, name })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.error || "Sign up failed.");
+            } else {
+                alert(result.message || "Registration successful! Please check your email for a verification link or OTP.");
+                setName("");
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+            }
+        } catch (err) {
+            alert("An error occurred during sign up.");
         }
     };
 
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            alert(error.message);
-            return;
-        }
-
-        if (!data.user?.email_confirmed_at) {
-            alert("Please verify your email before logging in.")
-            return;
-        }
-
-        await supabase.auth.updateUser({
-            data: { name }
-        });
-
-        const { error: upsertError } = await supabase.from("profiles").upsert([
-            {
-                id: data.user.id,
-                email: data.user.email,
-                name: data.user.user_metadata.name,
+        try {
+            const response = await fetch("http://localhost:5000/signin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.error || "Sign in failed.");
+            } else {
+                alert(result.message || "Login successful!");
             }
-        ]);
-
-        if (upsertError) {
-            alert("Error saving user profile: " + upsertError.message);
-        } else { 
-            alert("Login successful!")
+        } catch (err) {
+            alert("An error occurred during sign in.");
         }
     };
     
