@@ -31,6 +31,9 @@ export default function Hero() {
                 <div className="inline-block transition-transform duration-300 hover:scale-97">
                     <button
                         ref={btn1Ref}
+                        onClick={() => {
+                            window.dispatchEvent(new Event("open-signin"));
+                        }}
                         className="mt-9 font-bold text-white px-12 py-3 rounded-xl bg-gradient-to-r from-[#942E2E] to-[#B06262] 
                         bg-[length:200%_100%] bg-left hover:bg-right transition-all duration-500 cursor-pointer button-pop"
                     >
@@ -41,6 +44,9 @@ export default function Hero() {
                     <div className="inline-block transition-transform duration-300 hover:scale-97 ml-5">
                     <button
                         ref={btn2Ref}
+                        onClick={() => {
+                            window.dispatchEvent(new Event("open-signup"));
+                        }}
                         className="text-[#374169] px-12 py-3 outline rounded-xl outline-[#D1D5DB] outline-2 font-bold hover:text-[#942E2E] hover:outline-[#942E2E] transition-all duration-500 cursor-pointer button-pop"
                     >
                         Create Account

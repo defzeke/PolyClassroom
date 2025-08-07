@@ -21,16 +21,17 @@ app.post('/signup', async (req, res) => {
     if (!email || !password || !name) {
         return res.status(400).json({ error: 'Missing required fields.' });
     }
-    const { error } = await supabase.auth.admin.createUser({
+    const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        user_metadata: { name },
-        email_confirm: true
+        options: {
+            data: { name }
+        }
     });
     if (error) {
         return res.status(400).json({ error: error.message });
     }
-    return res.json({ message: 'Registration successful! Please check your email for a verification link or OTP.' });
+    return res.json({ message: 'Registration successful! Please check your email for a verification link or OTP.', data });
 });
 
 // Sign In endpoint
