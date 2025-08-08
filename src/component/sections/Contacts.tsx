@@ -115,8 +115,8 @@ export default function Contacts() {
                             </div>
                             <div className="flex flex-col items-center w-1/2 mt-13">
                                 <span className="font-bold text-lg mb-2">Email Support</span>
-                                <a className="text-[#8E2424] text-md font-medium hover:underline" href="mailto:help@pup.edu.ph">help@pup.edu.ph</a>
-                                <a className="text-[#8E2424] text-md font-medium hover:underline" href="mailto:support@pup.edu.ph">support@pup.edu.ph</a>
+                                <a className="text-[#8E2424] text-md font-medium hover:underline" >help@pup.edu.ph</a>
+                                <a className="text-[#8E2424] text-md font-medium hover:underline" >support@pup.edu.ph</a>
                                 <span className="text-[#6B7280] text-sm mt-2">PUP support available during office hours</span>
                             </div>
                         </div>

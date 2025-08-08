@@ -18,7 +18,6 @@ export default function FormTabs() {
             formRef.current.classList.add("visible");
         }
 
-        // Listen for custom event to open signup tab and focus name input
         const handleSignup = () => {
             setActiveTab("signup");
             setTimeout(() => {
@@ -27,7 +26,6 @@ export default function FormTabs() {
             }, 100);
         };
 
-        // Listen for custom event to open signin tab and focus email input
         const handleSignin = () => {
             setActiveTab("signin");
             setTimeout(() => {
@@ -51,6 +49,7 @@ export default function FormTabs() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [showPolicy, setShowPolicy] = useState(false);
     const [showTerms, setShowTerms] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -82,9 +81,10 @@ export default function FormTabs() {
     };
 
 
+
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        setIsLoading(true);
         try {
             const response = await fetch("http://localhost:5000/signin", {
                 method: "POST",
@@ -93,11 +93,16 @@ export default function FormTabs() {
             });
             const result = await response.json();
             if (!response.ok) {
+                setIsLoading(false);
                 alert(result.error || "Sign in failed.");
             } else {
-                router.push("/Home");
+                setTimeout(() => {
+                    setIsLoading(false);
+                    router.push("/Home");
+                }, 1000);
             }
         } catch (err) {
+            setIsLoading(false);
             alert("An error occurred during sign in.");
         }
     };
@@ -105,6 +110,18 @@ export default function FormTabs() {
     
     return(
         <>
+        {isLoading && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
+                <div className="bg-white/90 rounded-2xl shadow-2xl px-12 py-10 flex flex-col items-center border border-[#f3d6d6]">
+                    <div className="relative flex items-center justify-center mb-4">
+                        <span className="block w-16 h-16 rounded-full border-4 border-[#e5bcbc] border-t-[#942E2E] animate-spin"></span>
+                        <span className="absolute w-10 h-10 bg-white rounded-full"></span>
+                    </div>
+                    <span className="text-xl font-bold text-[#942E2E] tracking-wide">Signing in...</span>
+                </div>
+            </div>
+        )}
+
         <div ref={formRef} className="w-[550px] h-[600px] bg-[#FEFEFE] rounded-xl shadow-2xl p-0 mx-0 form-fade-blur">
             
             <div className="flex flex-col items-center mt-6">

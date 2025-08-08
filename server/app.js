@@ -50,7 +50,7 @@ app.post('/signin', async (req, res) => {
     if (!data.user?.email_confirmed_at) {
         return res.status(400).json({ error: 'Please verify your email before logging in.' });
     }
-    return res.json({ message: 'Login successful!' });
+    return res.json({ message: 'Login successful!', session: data.session });
 });
 
 app.listen(PORT, () => {
