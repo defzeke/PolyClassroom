@@ -8,9 +8,11 @@ export default function HomePage() {
             <Sidebar />
             <div className="flex-1 flex flex-col">
                 <Topbar />
+
                 <div className="flex-1 p-8">
                     main
                 </div>
+                
             </div>
         </div>
     );
